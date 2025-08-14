@@ -1,9 +1,9 @@
 "use client";
 
-import styles from "./page.module.css";
+import styles from "../page.module.css";
 import { useEffect } from "react";
 
-export default function Home() {
+export default function HomeWithSlug() {
   useEffect(() => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
@@ -24,5 +24,5 @@ export default function Home() {
     }
   }, []);
 
-  return <div className={styles.page}></div>;
+  return <div className={styles.page_with_slug}></div>;
 }
