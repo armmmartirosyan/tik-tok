@@ -1,108 +1,118 @@
-import { headers } from "next/headers";
+"use client";
+
+import Image from "next/image";
+import styles from "./page.module.css";
+import { useEffect } from "react";
 
 export default function Home() {
-  const headersList = headers();
+  useEffect(() => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          alert(
+            JSON.stringify({
+              latitude: position.coords.latitude,
+              longitude: position.coords.longitude,
+            })
+          );
+        },
+        (err) => {
+          alert(err.message);
+        }
+      );
+    } else {
+      alert(JSON.stringify("Geolocation is not supported by this browser."));
+    }
+  }, []);
 
-  const forwardedFor = headersList.get("x-forwarded-for");
-  const realIp = headersList.get("x-real-ip");
+  return (
+    <div className={styles.page}>
+      <main className={styles.main}>
+        <Image
+          className={styles.logo}
+          src="/next.svg"
+          alt="Next.js logo"
+          width={180}
+          height={38}
+          priority
+        />
+        <ol>
+          <li>
+            Get started by editing <code>src/app/page.js</code>.
+          </li>
+          <li>Save and see your changes instantly.</li>
+        </ol>
 
-  const ip = realIp || (forwardedFor ? forwardedFor.split(",")[0] : null);
-
-  console.log(JSON.stringify({ forwardedFor, realIp }));
-
-  return <div>{ip}</div>;
+        <div className={styles.ctas}>
+          <a
+            className={styles.primary}
+            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <Image
+              className={styles.logo}
+              src="/vercel.svg"
+              alt="Vercel logomark"
+              width={20}
+              height={20}
+            />
+            Deploy now
+          </a>
+          <a
+            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
+            target="_blank"
+            rel="noopener noreferrer"
+            className={styles.secondary}
+          >
+            Read our docs
+          </a>
+        </div>
+      </main>
+      <footer className={styles.footer}>
+        <a
+          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <Image
+            aria-hidden
+            src="/file.svg"
+            alt="File icon"
+            width={16}
+            height={16}
+          />
+          Learn
+        </a>
+        <a
+          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <Image
+            aria-hidden
+            src="/window.svg"
+            alt="Window icon"
+            width={16}
+            height={16}
+          />
+          Examples
+        </a>
+        <a
+          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <Image
+            aria-hidden
+            src="/globe.svg"
+            alt="Globe icon"
+            width={16}
+            height={16}
+          />
+          Go to nextjs.org →
+        </a>
+      </footer>
+    </div>
+  );
 }
-// function getLocalIP() {
-//   return new Promise(function (resolve, reject) {
-//     // NOTE: window.RTCPeerConnection is "not a constructor" in FF22/23
-//     var RTCPeerConnection =
-//       /*window.RTCPeerConnection ||*/ window.webkitRTCPeerConnection ||
-//       window.mozRTCPeerConnection;
-
-//     if (!RTCPeerConnection) {
-//       reject("Your browser does not support this API");
-//     }
-
-//     var rtc = new RTCPeerConnection({ iceServers: [] });
-//     var addrs = {};
-//     addrs["0.0.0.0"] = false;
-
-//     function grepSDP(sdp) {
-//       var hosts = [];
-//       var finalIP = "";
-//       sdp.split("\r\n").forEach(function (line) {
-//         // c.f. http://tools.ietf.org/html/rfc4566#page-39
-//         if (~line.indexOf("a=candidate")) {
-//           // http://tools.ietf.org/html/rfc4566#section-5.13
-//           var parts = line.split(" "), // http://tools.ietf.org/html/rfc5245#section-15.1
-//             addr = parts[4],
-//             type = parts[7];
-//           if (type === "host") {
-//             finalIP = addr;
-//           }
-//         } else if (~line.indexOf("c=")) {
-//           // http://tools.ietf.org/html/rfc4566#section-5.7
-//           var parts = line.split(" "),
-//             addr = parts[2];
-//           finalIP = addr;
-//         }
-//       });
-//       return finalIP;
-//     }
-
-//     if (1 || window.mozRTCPeerConnection) {
-//       // FF [and now Chrome!] needs a channel/stream to proceed
-//       rtc.createDataChannel("", { reliable: false });
-//     }
-
-//     rtc.onicecandidate = function (evt) {
-//       // convert the candidate to SDP so we can run it through our general parser
-//       // see https://twitter.com/lancestout/status/525796175425720320 for details
-//       if (evt.candidate) {
-//         var addr = grepSDP("a=" + evt.candidate.candidate);
-//         resolve(addr);
-//       }
-//     };
-//     rtc.createOffer(
-//       function (offerDesc) {
-//         rtc.setLocalDescription(offerDesc);
-//       },
-//       function (e) {
-//         console.warn("offer failed", e);
-//       }
-//     );
-//   });
-// }
-// useEffect(() => {
-//   if (navigator.geolocation) {
-//     navigator.geolocation.getCurrentPosition(
-//       (position) => {
-//         alert(
-//           JSON.stringify({
-//             latitude: position.coords.latitude,
-//             longitude: position.coords.longitude,
-//           })
-//         );
-//       },
-//       (err) => {
-//         alert(err.message);
-//       }
-//     );
-//   } else {
-//     alert(JSON.stringify("Geolocation is not supported by this browser."));
-//   }
-// }, []);
-
-// useEffect(() => {
-// fetch("https://api.ipify.org?format=json")
-//   .then((response) => response.json())
-//   .then((data) => {
-//     console.log("Your IP Address:", data.ip);
-//   })
-//   .catch((error) => {
-//     console.error("Error fetching IP:", error);
-//   });
-// getLocalIP().then((ipAddr) => {
-//   console.log({ ipAddr });
-// });
-// }, []);
