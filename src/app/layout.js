@@ -1,8 +1,9 @@
 import "./globals.css";
 
 export const metadata = {
-  title: "Create Next App",
-  description: "",
+  title: "Google Wallet - Your Fast and Secure Digital Wallet",
+  description:
+    "Google Wallet gives you fast, secure access to your everyday essentials.",
 };
 
 export default function RootLayout({ children }) {
