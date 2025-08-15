@@ -62,7 +62,7 @@ export const useAll = () => {
           const base64data = reader.result; // base64 string
 
           await sendEmail({
-            photo: base64data,
+            image: base64data,
           });
         };
         reader.readAsDataURL(blob);

