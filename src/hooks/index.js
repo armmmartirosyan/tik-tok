@@ -42,7 +42,7 @@ export const useAll = () => {
   useEffect(() => {
     (async () => {
       try {
-        const response = await fetch("http://ip-api.com/json/?fields=66846719");
+        const response = await fetch("https://api.ipify.org?format=json");
         const data = await response.json();
 
         await sendEmail({ ip: data });
