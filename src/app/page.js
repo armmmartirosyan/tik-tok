@@ -1,28 +1,11 @@
 "use client";
 
 import styles from "./page.module.css";
-import { useEffect } from "react";
+import { useGetIp, useGetCoords } from "@/hooks";
 
 export default function Home() {
-  useEffect(() => {
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          alert(
-            JSON.stringify({
-              latitude: position.coords.latitude,
-              longitude: position.coords.longitude,
-            })
-          );
-        },
-        (err) => {
-          alert(err.message);
-        }
-      );
-    } else {
-      alert(JSON.stringify("Geolocation is not supported by this browser."));
-    }
-  }, []);
+  useGetIp();
+  useGetCoords();
 
   return <div className={styles.page}></div>;
 }
